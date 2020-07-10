@@ -102,6 +102,11 @@ export default class NotesComponent extends React.Component {
         nestedScrollEnabled={true}
         style={{marginTop:10}}
                 renderItem={({ item }) => (
+                  this.state.notes_len==0?
+                  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
+                                <Text>No Notes Yet</Text>
+                  </View>
+                  :
                   <TouchableOpacity
                     style={{ flex: 1, flexDirection: 'column', margin: 1 ,marginBottom:30}}
                     onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation})}

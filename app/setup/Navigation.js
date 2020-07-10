@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/stack';
 import Home from '../components/Home';
 import AddNoteComponent from '../components/AddNote/index';
+import {fonts} from './Constants';
 
 
 

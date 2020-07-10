@@ -38,6 +38,22 @@ export default class AddNoteComponent extends React.Component {
     }
   }
 
+  async deleteNote(){
+      id=this.props.route.params.note.id;
+      try {
+        let data=await this.getData();
+        let idToRemove = id;
+        data = data.filter((item) => item.id !== idToRemove);
+        const jsonValue = JSON.stringify(data);
+        await AsyncStorage.setItem('@storage_Key', jsonValue);
+        let nav=this.props.route.params.navigation;
+        nav.navigate('HomeContainer',{refresh:true})
+        
+        //this.props.route.navigation.navigate('HomeContainer',{})
+      } catch (e) {
+        // saving error
+      }
+  }
   componentDidMount(){
     
   }
@@ -90,11 +106,19 @@ export default class AddNoteComponent extends React.Component {
             />
             
             <View style={{ marginHorizontal:'10%',marginTop:30 }}>
-              
               <Button icon="send" mode="contained" onPress={data => handleSubmit(data)}>
                 Submit
               </Button>
             </View>
+
+            {this.props.route.params.flag==1?
+             <View style={{ marginHorizontal:'10%',marginTop:30 }}>
+             <Button icon="send" mode="contained" style={{backgroundColor:'#D44638'}} onPress={()=>this.deleteNote()}>
+               Delete
+             </Button>
+           </View>:null}
+
+
           </View>
         )}
       </Formik>
