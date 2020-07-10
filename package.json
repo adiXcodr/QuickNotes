@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "adev": "adb reverse tcp:8081 tcp:8081 && react-native run-android --variant=debug",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "release":"react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew clean && ./gradlew assembleRelease -x bundleReleaseJsAndAssets"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
