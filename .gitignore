@@ -1,0 +1,53 @@
+# expo
+#
+.expo/
+# misc
+#
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.tgz
+# node
+#
+node_modules/
+npm-debug.log*
+package-lock.json
+# yarn
+yarn-error.log
+yarn-debug.log*
+yarn-error.log*
+# rbenv
+#
+.ruby-version
+# OSX
+#
+.DS_Store
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+# CocoaPods
+ios/Pods/
+# Android/IntelliJ
+#
+build/
+.idea
+.gradle
+local.properties
+*.iml
