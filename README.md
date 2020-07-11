@@ -6,7 +6,7 @@ React Native
 
 ### Demo
 <div align="center">
-  <img src="demo_M.png"/>
+  <img src="demo_M.png" width="250"/>
 </div>
 
 ### Installing depencencies and running the app
