@@ -4,6 +4,11 @@
 ## Technologies used
 React Native
 
+### Demo
+<div align="center">
+  <img src="demo_M.png"/>
+</div>
+
 ### Installing depencencies and running the app
 * Fork the repository
 * Clone the repository
