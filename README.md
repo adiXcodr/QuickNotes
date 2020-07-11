@@ -6,8 +6,8 @@ React Native
 
 ### Demo
 <div align="center" class="row">
-  <img src="demo_M.png" style="margin:0 5%" width="250"/>
-  <img src="demo_S.png" style="margin:0 5%" width="250"/>
+  <img src="demo_M.png" style="margin:0 5% !important;" width="200"/>
+  <img src="demo_S.png" style="margin:0 5% !important;" width="200"/>
 </div>
 
 ### Installing depencencies and running the app
