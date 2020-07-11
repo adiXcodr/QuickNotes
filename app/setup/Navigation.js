@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/stack';
 import Home from '../components/Home';
 import AddNoteComponent from '../components/AddNote/index';
-import {fonts} from './Constants';
+import SplashScreenContainer from '../components/SplashScreen/index';
 
 
 
@@ -25,15 +25,16 @@ export default class Start extends React.Component {
  componentDidMount(){
     let start = new Date().getTime();
     let seconds=0;
-    while(seconds<=5){
+    while(seconds<=1){
         let end = new Date().getTime();
         let diff = end - start;
         seconds = Math.floor(diff / 1000 % 60);
     }
-    if(seconds>5){
-        this.setState({isLoading:false});
-    }
-    console.log(seconds)
+    
+    
+    console.log(seconds);
+    
+    this.setState({isLoading:false});
     
  }
 
@@ -41,6 +42,10 @@ export default class Start extends React.Component {
   render() {
    
             return (
+
+            this.state.isLoading?
+            <SplashScreenContainer/>
+            :
             <NavigationContainer>
                 <Stack.Navigator
                 screenOptions={{

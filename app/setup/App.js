@@ -4,7 +4,6 @@ import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'react-native';
 import primaryTheme from './Theme';
-import Home from '../components/Home';
 import Start from './Navigation';
 
 

@@ -29,7 +29,7 @@ export default Home = (props) => {
       navigationState={{ index, routes }}
       onIndexChange={val => setIndex(val)}
       renderScene={renderScene}
-      barStyle={{backgroundColor:'rgba(0, 0, 0, 0.5)',position: 'absolute',
+      barStyle={{backgroundColor:'#212121',position: 'absolute',
       borderTopColor: 'rgba(0, 0, 0, 0.5)',
       elevation: 0,
       shadowColor: 'rgba(0, 0, 0, 0.5)',
