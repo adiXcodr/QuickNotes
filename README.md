@@ -4,11 +4,18 @@
 ## Technologies used
 React Native
 
-### Demo
+### Screenies
 <div align="center" class="row">
   <img src="demo_M.png" width="220"/>
   <img src="demo_S.png" width="220"/>
 </div>
+
+### Download for Android
+* ### [Universal](https://github.com/adiXcodr)
+* ### [arm64-v8a](https://github.com/adiXcodr)
+* ### [armeabi-v7a](https://github.com/adiXcodr)
+* ### [x86_64](https://github.com/adiXcodr)
+* ### [x86](https://github.com/adiXcodr)
 
 ### Installing depencencies and running the app
 * Fork the repository
