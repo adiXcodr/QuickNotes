@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/stack';
 import Home from '../components/Home';
 import AddNoteComponent from '../components/AddNote/index';
-import SplashScreenContainer from '../components/SplashScreen/index';
+//import SplashScreenContainer from '../components/SplashScreen/index';
 
 
 
@@ -43,9 +43,7 @@ export default class Start extends React.Component {
    
             return (
 
-            this.state.isLoading?
-            <SplashScreenContainer/>
-            :
+            
             <NavigationContainer>
                 <Stack.Navigator
                 screenOptions={{

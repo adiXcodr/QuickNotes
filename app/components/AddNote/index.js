@@ -105,18 +105,17 @@ export default class AddNoteComponent extends React.Component {
               style={{ fontSize: 15, width: '90%' ,marginTop:30}}
             />
             
-            <View style={{ marginHorizontal:'10%',marginTop:30 }}>
-              <Button icon="send" mode="contained" onPress={data => handleSubmit(data)}>
+            <View style={{marginTop:30, flexDirection:'row' }}>
+              <Button icon="send" mode="contained" style={{marginHorizontal:'2%'}} onPress={data => handleSubmit(data)}>
                 Submit
               </Button>
+              {this.props.route.params.flag==1?
+              <Button icon="delete-circle" mode="contained" style={{backgroundColor:'#D44638',marginHorizontal:'2%'}} onPress={()=>this.deleteNote()}>
+              Delete
+            </Button>:null}
             </View>
 
-            {this.props.route.params.flag==1?
-             <View style={{ marginHorizontal:'10%',marginTop:30 }}>
-             <Button icon="send" mode="contained" style={{backgroundColor:'#D44638'}} onPress={()=>this.deleteNote()}>
-               Delete
-             </Button>
-           </View>:null}
+            
 
 
           </View>

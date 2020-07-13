@@ -61,7 +61,7 @@ export default class NotesComponent extends React.Component {
     this.setState({notes:DATA,notes_len:DATA.length});
   }
 
-
+ 
   rightHeader = () => {
     return (
         <View style={{alignItems:'center',justifyContent:'center',right:'10%'}}>
@@ -94,25 +94,24 @@ export default class NotesComponent extends React.Component {
                                 <ActivityIndicator size="large" color="white" />
                           </View>
       :
-      <View style={styles.body}>
+      this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
+                                      <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
+                                </View>
+      :<View style={styles.body}>
           
         <ScrollView >
         <FlatList
         data={this.state.notes}
         nestedScrollEnabled={true}
-        style={{marginTop:10}}
+        style={{marginTop:20}}
                 renderItem={({ item }) => (
-                  this.state.notes_len==0?
-                  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
-                                <Text>No Notes Yet</Text>
-                  </View>
-                  :
+                  
                   <TouchableOpacity
                     style={{ flex: 1, flexDirection: 'column', margin: 1 ,marginBottom:30}}
                     onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation})}
                     activeOpacity={0.2}
                   >
-                    <View style={{borderColor:'#ddd',borderWidth:0.5,marginHorizontal:'2%',borderRadius:10}}>
+                    <View style={{borderColor:'#ddd',borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
                         <View style={{backgroundColor:'#ddd',borderTopLeftRadius:10,borderTopRightRadius:10}}>
                             <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:'black'}}>{item.title}</Title>
                         </View>

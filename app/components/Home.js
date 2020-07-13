@@ -15,8 +15,8 @@ export default Home = (props) => {
   console.log(refresh)
   const [index, setIndex] = React.useState(0);
   const routes = [
-    { key: 'notes', title: 'Notes', icon: 'playlist-edit' , color: '#009688',navigation:props.navigation,refresh:refresh,},
-    { key: 'about', title: 'About', icon: 'information-outline', color: '#795548',navigation:props.navigation },
+    { key: 'notes', title: 'Notes', icon: 'playlist-edit' , color: '#212121',navigation:props.navigation,refresh:refresh,},
+    { key: 'about', title: 'About', icon: 'information-outline', color: '#212121',navigation:props.navigation },
   ];
 
   const renderScene = BottomNavigation.SceneMap({
@@ -29,15 +29,7 @@ export default Home = (props) => {
       navigationState={{ index, routes }}
       onIndexChange={val => setIndex(val)}
       renderScene={renderScene}
-      barStyle={{backgroundColor:'#212121',position: 'absolute',
-      borderTopColor: 'rgba(0, 0, 0, 0.5)',
-      elevation: 0,
-      shadowColor: 'rgba(0, 0, 0, 0.5)',
-      shadowOpacity: 0,
-      shadowOffset: {
-        height: 0,
-      },
-      shadowRadius: 0,}}
+      shifting={true}
     />
   );
 };
