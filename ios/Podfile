@@ -10,6 +10,8 @@ target 'QuickNotes' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-tesseract-ocr', :path => '../node_modules/react-native-tesseract-ocr'
+
   target 'QuickNotesTests' do
     inherit! :complete
     # Pods for testing

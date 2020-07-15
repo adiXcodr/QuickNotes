@@ -12,7 +12,6 @@ export default Home = (props) => {
   } catch (e) {
     refresh=false;
   }
-  console.log(refresh)
   const [index, setIndex] = React.useState(0);
   const routes = [
     { key: 'notes', title: 'Notes', icon: 'playlist-edit' , color: '#212121',navigation:props.navigation,refresh:refresh,},

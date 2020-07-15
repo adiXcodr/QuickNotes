@@ -7,11 +7,14 @@ import {
   FlatList,
   YellowBox,
   StatusBar,
-  ActivityIndicator  
+  ActivityIndicator,  
+  PermissionsAndroid
 } from "react-native";
-import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
 import styles from './style.js';
 import AsyncStorage from '@react-native-community/async-storage';
+import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
+import ImagePicker from 'react-native-image-picker';
 //import SplashScreenContainer from '../SplashScreen/index';
 
 
@@ -26,7 +29,8 @@ export default class NotesComponent extends React.Component {
       notes:[],
       notes_len:0,
       refresh:false,
-      loading:true
+      loading:true,
+      imageUri:''
     };
 
 
@@ -61,6 +65,79 @@ export default class NotesComponent extends React.Component {
     this.setState({notes:DATA,notes_len:DATA.length});
   }
 
+
+  requestCameraPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: "Cool Photo App Camera Permission",
+          message:
+            "Cool Photo App needs access to your camera " +
+            "so you can take awesome pictures.",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the camera");
+      } else {
+        console.log("Camera permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+
+  requestReadPermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          title: "Read Permisson",
+          message:
+           "To Do OCR",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the OCR");
+      } else {
+        console.log("OCR permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
+
+  requestWritePermission = async () => {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: "Write Permisson",
+          message:
+           "To Do OCR",
+          buttonNeutral: "Ask Me Later",
+          buttonNegative: "Cancel",
+          buttonPositive: "OK"
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        console.log("You can use the OCR");
+      } else {
+        console.log("OCR permission denied");
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+  };
+
  
   rightHeader = () => {
     return (
@@ -77,10 +154,56 @@ export default class NotesComponent extends React.Component {
     });
   };
 
+  async recogniseOCR(path){
+    try {
+      const tesseractOptions = {};
+      const recognizedText = await TesseractOcr.recognize(
+        path,
+        LANG_ENGLISH,
+        tesseractOptions,
+      );
+      console.log(recognizedText)
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+
+  scanNote(){
+    this.requestCameraPermission();
+    const options = {
+      title: 'Select Avatar',
+      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    ImagePicker.launchCamera(options, (response) => {
+          
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            } else if (response.customButton) {
+              console.log('User tapped custom button: ', response.customButton);
+            } else {
+              console.log(response.uri);
+              this.recogniseOCR(response.path);
+              this.setState({imageUri:response.uri});
+            }
+    });
+
+
+  }
+
   componentDidMount() {
     this.setHeaderOptions();
     this.setState({refresh:this.props.route.refresh});
     this.setData();
+    this.requestReadPermission();
+    this.requestWritePermission();
   }
 
   componentWillUnmount() {
@@ -96,9 +219,29 @@ export default class NotesComponent extends React.Component {
       :
       this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
                                       <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
+                                      <View style={{  position: 'absolute',
+                                                    bottom:0,
+                                                    right:10,}}>
+                                            <IconButton
+                                                icon="camera"
+                                                color={'red'}
+                                                size={30}
+                                                onPress={() => this.scanNote()}
+                                            />
+                                    </View>
                                 </View>
+
       :<View style={styles.body}>
-          
+         <View style={{  position: 'absolute',
+                      bottom:0,
+                      right:10,}}>
+              <IconButton
+                  icon="camera"
+                  color={'red'}
+                  size={30}
+                  onPress={() => this.scanNote()}
+              />
+      </View> 
         <ScrollView >
         <FlatList
         data={this.state.notes}
@@ -126,7 +269,10 @@ export default class NotesComponent extends React.Component {
                 keyExtractor={(item, index) => index.toString()}
       />
       </ScrollView>
+
       
+
+
       </View>
     );
   }
