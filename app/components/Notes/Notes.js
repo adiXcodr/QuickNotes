@@ -232,6 +232,7 @@ export default class NotesComponent extends React.Component {
                                 </View>
 
       :<View style={styles.body}>
+         
          <View style={{  position: 'absolute',
                       bottom:0,
                       right:10,}}>
@@ -241,6 +242,7 @@ export default class NotesComponent extends React.Component {
                   size={30}
                   onPress={() => this.scanNote()}
               />
+              
       </View> 
         <ScrollView >
         <FlatList
