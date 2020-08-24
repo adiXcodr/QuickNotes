@@ -30,7 +30,7 @@ export default class AboutComponent extends React.Component {
                     <View style={{alignItems:'center',justifyContent:'center'}}>
                             <Title style={{marginTop:height/20,fontSize:25}}>Reach Me</Title>   
                             <View style={{marginTop:height/30}}>
-                                    <Avatar.Image size={150} source={require('./pp.jpg')} /> 
+                                    <Avatar.Image size={100} source={require('./pp.jpg')} /> 
                             </View>
                             <Title style={{marginTop:height/30,fontSize:20}}>Adittya Dey</Title>
                                 <Paragraph style={{marginHorizontal:'10%'}}>Full Stack Developer</Paragraph>

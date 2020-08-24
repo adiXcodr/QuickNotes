@@ -36,7 +36,7 @@ export default class NotesComponent extends React.Component {
 
     getData = async () => {
       try {
-        const jsonValue = await AsyncStorage.getItem('@storage_Key')
+        const jsonValue = await AsyncStorage.getItem('@note_data')
         return jsonValue != null ? JSON.parse(jsonValue) : null;
       } catch(e) {
         // error reading value
@@ -71,9 +71,9 @@ export default class NotesComponent extends React.Component {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: "Cool Photo App Camera Permission",
+          title: " Camera Permission",
           message:
-            "Cool Photo App needs access to your camera " +
+            "App needs access to your camera " +
             "so you can take awesome pictures.",
           buttonNeutral: "Ask Me Later",
           buttonNegative: "Cancel",
@@ -219,7 +219,9 @@ export default class NotesComponent extends React.Component {
       :
       this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
                                       <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
-                                      <View style={{  position: 'absolute',
+
+
+                                      {/* <View style={{  position: 'absolute',
                                                     bottom:0,
                                                     right:10,}}>
                                             <IconButton
@@ -228,12 +230,14 @@ export default class NotesComponent extends React.Component {
                                                 size={30}
                                                 onPress={() => this.scanNote()}
                                             />
-                                    </View>
+                                    </View> */}
+
+                                    
                                 </View>
 
       :<View style={styles.body}>
          
-         <View style={{  position: 'absolute',
+         {/* <View style={{  position: 'absolute',
                       bottom:0,
                       right:10,}}>
               <IconButton
@@ -243,7 +247,9 @@ export default class NotesComponent extends React.Component {
                   onPress={() => this.scanNote()}
               />
               
-      </View> 
+      </View>  */}
+
+
         <ScrollView >
         <FlatList
         data={this.state.notes}

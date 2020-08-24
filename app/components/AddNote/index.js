@@ -10,7 +10,7 @@ export default class AddNoteComponent extends React.Component {
 
   getData = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('@storage_Key')
+      const jsonValue = await AsyncStorage.getItem('@note_data')
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch(e) {
       // error reading value
@@ -28,7 +28,7 @@ export default class AddNoteComponent extends React.Component {
       data = data.filter((item) => item.id !== idToRemove);
       data.push({id,title,content});
       const jsonValue = JSON.stringify(data);
-      await AsyncStorage.setItem('@storage_Key', jsonValue);
+      await AsyncStorage.setItem('@note_data', jsonValue);
       let nav=this.props.route.params.navigation;
       nav.navigate('HomeContainer',{refresh:true})
       
@@ -45,7 +45,7 @@ export default class AddNoteComponent extends React.Component {
         let idToRemove = id;
         data = data.filter((item) => item.id !== idToRemove);
         const jsonValue = JSON.stringify(data);
-        await AsyncStorage.setItem('@storage_Key', jsonValue);
+        await AsyncStorage.setItem('@note_data', jsonValue);
         let nav=this.props.route.params.navigation;
         nav.navigate('HomeContainer',{refresh:true})
         

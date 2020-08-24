@@ -18,6 +18,12 @@ React Native
 * Run in Android by `npm run android`
 * Run in IOS by `npm run ios`
 
+### Generating Production APK
+* In project folder, run `react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res`
+* Run `cd android`
+* Then `./gradlew clean`
+* And lastly `./gradlew assembleRelease -x bundleReleaseJsAndAssets`
+* Get APK from `./android/app/build/outputs/apk/release`
 
 <br>
 
