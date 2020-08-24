@@ -13,7 +13,6 @@ import {
 import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
 import styles from './style.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import TesseractOcr, { LANG_ENGLISH } from 'react-native-tesseract-ocr';
 import ImagePicker from 'react-native-image-picker';
 //import SplashScreenContainer from '../SplashScreen/index';
 
@@ -98,16 +97,16 @@ export default class NotesComponent extends React.Component {
         {
           title: "Read Permisson",
           message:
-           "To Do OCR",
+           "To Get Note Data",
           buttonNeutral: "Ask Me Later",
           buttonNegative: "Cancel",
           buttonPositive: "OK"
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the OCR");
+        console.log("Successful");
       } else {
-        console.log("OCR permission denied");
+        console.log("Permission denied");
       }
     } catch (err) {
       console.warn(err);
@@ -122,16 +121,16 @@ export default class NotesComponent extends React.Component {
         {
           title: "Write Permisson",
           message:
-           "To Do OCR",
+           "To Write Data",
           buttonNeutral: "Ask Me Later",
           buttonNegative: "Cancel",
           buttonPositive: "OK"
         }
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the OCR");
+        console.log("Successful");
       } else {
-        console.log("OCR permission denied");
+        console.log("Permission denied");
       }
     } catch (err) {
       console.warn(err);
@@ -154,20 +153,6 @@ export default class NotesComponent extends React.Component {
     });
   };
 
-  async recogniseOCR(path){
-    try {
-      const tesseractOptions = {};
-      const recognizedText = await TesseractOcr.recognize(
-        path,
-        LANG_ENGLISH,
-        tesseractOptions,
-      );
-      console.log(recognizedText)
-    } catch (err) {
-      console.error(err);
-    }
-
-  }
 
   scanNote(){
     this.requestCameraPermission();
@@ -189,8 +174,7 @@ export default class NotesComponent extends React.Component {
             } else if (response.customButton) {
               console.log('User tapped custom button: ', response.customButton);
             } else {
-              console.log(response.uri);
-              this.recogniseOCR(response.path);
+              console.log(response.uri);   //or .path
               this.setState({imageUri:response.uri});
             }
     });
@@ -232,7 +216,7 @@ export default class NotesComponent extends React.Component {
                                             />
                                     </View> */}
 
-                                    
+
                                 </View>
 
       :<View style={styles.body}>

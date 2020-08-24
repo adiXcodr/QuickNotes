@@ -9,11 +9,14 @@
     "test": "jest",
     "adev": "adb reverse tcp:8081 tcp:8081 && react-native run-android --variant=debug",
     "lint": "eslint .",
+    "reset-cache": "react-native start --reset-cache",
+    "link-vector-icons": "react-native link react-native-vector-icons",
     "release": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res && cd android && ./gradlew clean && ./gradlew assembleRelease -x bundleReleaseJsAndAssets"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/toolbar-android": "^0.1.0-rc.2",
     "@react-navigation/native": "^5.6.1",
     "@react-navigation/stack": "^5.6.2",
     "formik": "^2.1.4",
@@ -25,8 +28,7 @@
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.7",
     "react-native-screens": "^2.9.0",
-    "react-native-tesseract-ocr": "^2.0.0",
-    "react-native-vector-icons": "^7.0.0"
+    "react-native-vector-icons": "6.7.0"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
