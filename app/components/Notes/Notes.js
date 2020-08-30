@@ -7,18 +7,19 @@ import {
   FlatList,
   YellowBox,
   StatusBar,
-  ActivityIndicator,  
-  PermissionsAndroid
+  ActivityIndicator,
+  Dimensions
 } from "react-native";
 import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
 import styles from './style.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import ImagePicker from 'react-native-image-picker';
+import ImageModal from 'react-native-image-modal';
+
 //import SplashScreenContainer from '../SplashScreen/index';
 
 
 YellowBox.ignoreWarnings([
-  'VirtualizedLists should never be nested', // TODO: Remove when fixed
+  'VirtualizedLists should never be nested', 
 ]);
 
 
@@ -28,8 +29,7 @@ export default class NotesComponent extends React.Component {
       notes:[],
       notes_len:0,
       refresh:false,
-      loading:true,
-      imageUri:''
+      loading:true
     };
 
 
@@ -65,77 +65,6 @@ export default class NotesComponent extends React.Component {
   }
 
 
-  requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: " Camera Permission",
-          message:
-            "App needs access to your camera " +
-            "so you can take awesome pictures.",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("You can use the camera");
-      } else {
-        console.log("Camera permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-
-
-  requestReadPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: "Read Permisson",
-          message:
-           "To Get Note Data",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("Successful");
-      } else {
-        console.log("Permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-
-
-  requestWritePermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: "Write Permisson",
-          message:
-           "To Write Data",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK"
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log("Successful");
-      } else {
-        console.log("Permission denied");
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
 
  
   rightHeader = () => {
@@ -154,40 +83,13 @@ export default class NotesComponent extends React.Component {
   };
 
 
-  scanNote(){
-    this.requestCameraPermission();
-    const options = {
-      title: 'Select Avatar',
-      customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-      storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
-    };
-
-    ImagePicker.launchCamera(options, (response) => {
-          
-            if (response.didCancel) {
-              console.log('User cancelled image picker');
-            } else if (response.error) {
-              console.log('ImagePicker Error: ', response.error);
-            } else if (response.customButton) {
-              console.log('User tapped custom button: ', response.customButton);
-            } else {
-              console.log(response.uri);   //or .path
-              this.setState({imageUri:response.uri});
-            }
-    });
-
-
-  }
+  
 
   componentDidMount() {
     this.setHeaderOptions();
     this.setState({refresh:this.props.route.refresh});
     this.setData();
-    this.requestReadPermission();
-    this.requestWritePermission();
+    
   }
 
   componentWillUnmount() {
@@ -205,35 +107,11 @@ export default class NotesComponent extends React.Component {
                                       <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
 
 
-                                      {/* <View style={{  position: 'absolute',
-                                                    bottom:0,
-                                                    right:10,}}>
-                                            <IconButton
-                                                icon="camera"
-                                                color={'red'}
-                                                size={30}
-                                                onPress={() => this.scanNote()}
-                                            />
-                                    </View> */}
 
 
                                 </View>
 
       :<View style={styles.body}>
-         
-         {/* <View style={{  position: 'absolute',
-                      bottom:0,
-                      right:10,}}>
-              <IconButton
-                  icon="camera"
-                  color={'red'}
-                  size={30}
-                  onPress={() => this.scanNote()}
-              />
-              
-      </View>  */}
-
-
         <ScrollView >
         <FlatList
         data={this.state.notes}
@@ -253,8 +131,29 @@ export default class NotesComponent extends React.Component {
                         
                         <View style={{marginHorizontal:'10%',marginVertical:30}}>
                           
-                          <Paragraph>{item.content}</Paragraph>
+                          <Paragraph style={{textAlign:'center'}}>{item.content}</Paragraph>
                         </View>
+                        {item.imageUri!=''?
+                          <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:30,marginBottom:50}}>
+                          <ImageModal
+                          resizeMode="contain"
+                          imageBackgroundColor="#212121"
+                          overlayBackgroundColor="#212121"
+                          style={{
+                            width: Dimensions.get('window').width/1.25,
+                            height: 150,
+                            alignSelf:'center',
+                            alignContent:'center'
+                          }}
+                          source={{
+                            uri: item.imageUri,
+                          }}
+                          
+                        />
+                 
+                    </View>
+                        :null}
+
                     </View>
                   </TouchableOpacity>
                 )}

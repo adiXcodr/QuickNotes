@@ -4,19 +4,24 @@ import styles from './style';
 
 class SplashScreenContainer extends Component {
 
+  state={
+    
+  }
 
-  async componentDidMount() {
+   componentDidMount() {
     StatusBar.setBackgroundColor('#0099FF', true);
+    
   }
 
   
 
   render() {
     return (
-      <View style={styles.viewStyles}>
+      <View style={{flex:1,backgroundColor:'#0099FF',alignItems:'center',justifyContent:'center'}}>
         
-        <Text style={styles.textStyles}>Q Notes</Text>
+        <Text style={{color:'white',fontSize:40,marginBottom:20}}>QNotes</Text>
         <ActivityIndicator size="large" color="white" />
+        <Text style={{color:'white',fontSize:20,marginTop:20}}>A Fast Notemaking App</Text>
       </View>
     );
   }

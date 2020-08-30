@@ -9,7 +9,7 @@ import {
 } from '@react-navigation/stack';
 import Home from '../components/Home';
 import AddNoteComponent from '../components/AddNote/index';
-//import SplashScreenContainer from '../components/SplashScreen/index';
+import SplashScreenContainer from '../components/SplashScreen/index';
 
 
 
@@ -23,16 +23,7 @@ export default class Start extends React.Component {
  
 
  componentDidMount(){
-    let start = new Date().getTime();
-    let seconds=0;
-    while(seconds<=1){
-        let end = new Date().getTime();
-        let diff = end - start;
-        seconds = Math.floor(diff / 1000 % 60);
-    }
-    
-    
-    console.log(seconds);
+   
     
     this.setState({isLoading:false});
     
@@ -54,7 +45,9 @@ export default class Start extends React.Component {
                 }}
                 headerMode="float"
                 initialRouteName="HomeContainer"
-                >
+                >   
+
+
                     <Stack.Screen options={{ title: 'QNotes',
                         headerStyle: {
                             backgroundColor: '#212121',
