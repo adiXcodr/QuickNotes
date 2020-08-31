@@ -6,7 +6,6 @@ import {
   ScrollView,
   FlatList,
   YellowBox,
-  StatusBar,
   ActivityIndicator,
   Dimensions
 } from "react-native";
@@ -14,8 +13,6 @@ import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
 import styles from './style.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImageModal from 'react-native-image-modal';
-
-//import SplashScreenContainer from '../SplashScreen/index';
 
 
 YellowBox.ignoreWarnings([
@@ -52,12 +49,12 @@ export default class NotesComponent extends React.Component {
       DATA=noteData;
       DATA = DATA.sort((a, b) => b.id - a.id);
       this.setState({loading:false});
-      StatusBar.setBackgroundColor('#212121', true);
+     
     }
     else{
       console.log('Null Data');
       this.setState({loading:false});
-      StatusBar.setBackgroundColor('#212121', true);
+      
     }
     
 
@@ -98,12 +95,13 @@ export default class NotesComponent extends React.Component {
 
 
   render() {
+    let theme=this.props.route.theme;
     return (
-      this.state.loading? <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
-                                <ActivityIndicator size="large" color="white" />
+      this.state.loading? <View style={{ flex: 1, backgroundColor:theme.background, justifyContent:'center',alignItems:'center'}}>
+                                <ActivityIndicator size="large" color={theme.text} />
                           </View>
       :
-      this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:"#212121", justifyContent:'center',alignItems:'center'}}>
+      this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:theme.background, justifyContent:'center',alignItems:'center'}}>
                                       <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
 
 
@@ -124,9 +122,9 @@ export default class NotesComponent extends React.Component {
                     onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation})}
                     activeOpacity={0.2}
                   >
-                    <View style={{borderColor:'#ddd',borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
-                        <View style={{backgroundColor:'#ddd',borderTopLeftRadius:10,borderTopRightRadius:10}}>
-                            <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:'black'}}>{item.title}</Title>
+                    <View style={{borderColor:theme.accent,borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
+                        <View style={{backgroundColor:theme.accent,borderTopLeftRadius:10,borderTopRightRadius:10}}>
+                            <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:theme.background}}>{item.title}</Title>
                         </View>
                         
                         <View style={{marginHorizontal:'10%',marginVertical:30}}>
@@ -137,8 +135,8 @@ export default class NotesComponent extends React.Component {
                           <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:30,marginBottom:50}}>
                           <ImageModal
                           resizeMode="contain"
-                          imageBackgroundColor="#212121"
-                          overlayBackgroundColor="#212121"
+                          imageBackgroundColor={theme.background}
+                          overlayBackgroundColor={theme.background}
                           style={{
                             width: Dimensions.get('window').width/1.25,
                             height: 150,

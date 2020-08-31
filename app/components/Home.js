@@ -2,7 +2,6 @@ import * as React from 'react';
 import { BottomNavigation, Text } from 'react-native-paper';
 import NotesComponent from './Notes/Notes';
 import AboutComponent from './About/index';
-import { View } from "react-native";
 
 
 export default Home = (props) => {
@@ -14,8 +13,8 @@ export default Home = (props) => {
   }
   const [index, setIndex] = React.useState(0);
   const routes = [
-    { key: 'notes', title: 'Notes', icon: 'playlist-edit' , color: '#212121',navigation:props.navigation,refresh:refresh,},
-    { key: 'about', title: 'About', icon: 'information-outline', color: '#212121',navigation:props.navigation },
+    { key: 'notes', title: 'Notes', icon: 'playlist-edit' , color: props.theme.background ,navigation:props.navigation,refresh:refresh,theme:props.theme},
+    { key: 'about', title: 'About', icon: 'information-outline', color: props.theme.background,navigation:props.navigation,theme:props.theme },
   ];
 
   const renderScene = BottomNavigation.SceneMap({
@@ -29,6 +28,8 @@ export default Home = (props) => {
       onIndexChange={val => setIndex(val)}
       renderScene={renderScene}
       shifting={true}
+      activeColor={props.theme.text}
+      inactiveColor={props.theme.text}
     />
   );
 };

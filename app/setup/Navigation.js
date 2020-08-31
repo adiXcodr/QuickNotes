@@ -9,29 +9,31 @@ import {
 } from '@react-navigation/stack';
 import Home from '../components/Home';
 import AddNoteComponent from '../components/AddNote/index';
-import SplashScreenContainer from '../components/SplashScreen/index';
-
+import {
+  StatusBar
+} from "react-native";
 
 
 const Stack = createStackNavigator();
 
 export default class Start extends React.Component {
   state = {
-    isLoading:true
+    isLoading:true,
+    theme:{}
   };
   
  
 
  componentDidMount(){
    
-    
-    this.setState({isLoading:false});
+    StatusBar.setBackgroundColor(this.props.userTheme.accent, true);
+    this.setState({isLoading:false,theme:this.props.userTheme});
     
  }
 
   
   render() {
-   
+            let theme=this.props.userTheme;
             return (
 
             
@@ -40,7 +42,7 @@ export default class Start extends React.Component {
                 screenOptions={{
                     gestureEnabled: true,
                     gestureDirection: 'vertical',
-                    cardStyle: { backgroundColor: '#212121' },
+                    cardStyle: { backgroundColor: theme.accent },
                     ...TransitionPresets.RevealFromBottomAndroid,
                 }}
                 headerMode="float"
@@ -50,24 +52,24 @@ export default class Start extends React.Component {
 
                     <Stack.Screen options={{ title: 'QNotes',
                         headerStyle: {
-                            backgroundColor: '#212121',
+                            backgroundColor: theme.accent,
                           },
-                          headerTitleStyle:{color:'#0099FF'},
-                          headerTintColor:'white'
+                          headerTitleStyle:{color:theme.primary},
+                          headerTintColor:theme.text
                          }} name="HomeContainer">
-                        {props => <Home key={Date.now()} {...props} />}
+                        {props => <Home key={Date.now()} {...props} theme={theme}/>}
                     </Stack.Screen>
                     <Stack.Screen
                         options={{ title: 'Add Note',
                         headerStyle: {
-                            backgroundColor: '#212121',
+                            backgroundColor: theme.accent,
                           },
-                          headerTitleStyle:{color:'white'},
-                          headerTintColor:'white'
+                          headerTitleStyle:{color:theme.text},
+                          headerTintColor:theme.text
                          }}
                         name="AddNoteComponent"
                     >
-                        {props => <AddNoteComponent {...props} />}
+                        {props => <AddNoteComponent {...props} theme={theme}/>}
                     </Stack.Screen>
                 
                 </Stack.Navigator>

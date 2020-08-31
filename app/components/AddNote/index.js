@@ -9,7 +9,8 @@ import ImageModal from 'react-native-image-modal';
 export default class AddNoteComponent extends React.Component {
 
   state={
-    imageUri:''
+    imageUri:'',
+    imageBase64:''
   }
 
   requestCameraPermission = async () => {
@@ -84,8 +85,9 @@ export default class AddNoteComponent extends React.Component {
     }
   };
 
-  setImages(uri){
-    this.setState({imageUri:uri});
+  setImages(uri,base64){
+    console.log('Base64 =',base64);
+    this.setState({imageUri:uri,imageBase64:base64});
    
   }
 
@@ -95,7 +97,7 @@ export default class AddNoteComponent extends React.Component {
     this.requestCameraPermission();
     const options = {
       title: 'Select Image',
-     
+      noData:false,
       storageOptions: {
         skipBackup: true,
         path: 'images',
@@ -113,7 +115,7 @@ export default class AddNoteComponent extends React.Component {
             } else {
               console.log(response.uri);   //or .path
               console.log(response.path);
-              this.setImages(response.uri);
+              this.setImages(response.uri,response.data);
             }
     });
 
@@ -138,9 +140,9 @@ export default class AddNoteComponent extends React.Component {
       }
       let id=value.note_id, title=value.note_title, content=value.note_content;
       let idToRemove = id;
-      let imageUri=this.state.imageUri;
+      let imageUri=this.state.imageUri, imageBase64=this.state.imageBase64;
       data = data.filter((item) => item.id !== idToRemove);
-      data.push({id,title,content,imageUri});
+      data.push({id,title,content,imageUri,imageBase64});
       const jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem('@note_data', jsonValue);
       let nav=this.props.route.params.navigation;

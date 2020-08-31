@@ -3,38 +3,81 @@
 import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { StatusBar } from 'react-native';
-import primaryTheme from './Theme';
 import Start from './Navigation';
 import SplashScreenContainer from '../components/SplashScreen/index';
 import SplashScreen from 'react-native-splash-screen'
-
+import AsyncStorage from '@react-native-community/async-storage';
+import { DefaultTheme } from 'react-native-paper';
+import {fonts} from './Constants';
 
 export default class App extends React.Component {
 
   state={
-      loading:true
+      loading:true,
+      theme:{},
+      primaryTheme:{}
+  }
+
+  getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@theme_data')
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      console.log(e);
+      return(null);
+    }
+  }
+
+  async setColors(){
+    let theme=await this.getData();
+    if(!theme){
+      let mode='light', primary='#0099FF', background='white', text='black', accent='#fafafa';
+      theme={mode,primary,background,text,accent};
+    }
+    const primaryTheme = {
+      ...DefaultTheme,
+      colors: {
+        ...DefaultTheme.colors,
+        primary: theme.primary,
+        background: theme.background,
+        accent: theme.accent,
+        surface: theme.accent,
+        text:theme.text,
+        placeholder:theme.placeholder
+      },
+      fonts: {
+        ...DefaultTheme.fonts,
+        regular: { fontFamily: fonts.regular },
+        medium: { fontFamily: fonts.bold },
+      },
+    };
+    this.setState({theme:theme,primaryTheme:primaryTheme});
   }
 
   async componentDidMount(){
     SplashScreen.hide();
     setTimeout(() => this.setState({loading:false}) , 1000);
+    this.setColors();
   }
 
   render(){
+    
+
     return (
- 
-      <PaperProvider theme={primaryTheme}>
+      Object.keys(this.state.theme).length!=0?
+      <PaperProvider theme={this.state.primaryTheme}>
         <StatusBar
-          barStyle="light-content"
-          backgroundColor={'#212121'}
+          barStyle={this.state.theme.mode!='light'?"light-content":"dark-content"}
+          backgroundColor={this.state.theme.accent}
           translucent={true}
         />
       {this.state.loading?
         <SplashScreenContainer/>
         :
-        <Start />
+        <Start userTheme={this.state.theme}/>
       }
       </PaperProvider>
+      :null
     
   );
   }
