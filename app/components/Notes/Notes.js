@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   ScrollView,
   FlatList,
-  YellowBox,
   ActivityIndicator,
   Dimensions
 } from "react-native";
@@ -13,11 +12,8 @@ import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
 import styles from './style.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImageModal from 'react-native-image-modal';
+import RNRestart from 'react-native-restart';
 
-
-YellowBox.ignoreWarnings([
-  'VirtualizedLists should never be nested', 
-]);
 
 
 export default class NotesComponent extends React.Component {
@@ -45,7 +41,6 @@ export default class NotesComponent extends React.Component {
     let DATA=[];
     if(noteData!=null)
     {
-      console.log(noteData);
       DATA=noteData;
       DATA = DATA.sort((a, b) => b.id - a.id);
       this.setState({loading:false});
@@ -62,14 +57,32 @@ export default class NotesComponent extends React.Component {
   }
 
 
+  async setTheme(){
+    let theme={};
+    if(this.props.route.theme.mode=="light"){
+      let mode='dark', primary='#f7b621', background='#212121', text='white', accent='#212121';
+      theme={mode,primary,background,text,accent};
+    }
+    else{
+      let mode='light', primary='#f7b621', background='white', text='black', accent='white';
+      theme={mode,primary,background,text,accent};
+    }
+    const jsonValue = JSON.stringify(theme);
+    await AsyncStorage.setItem('@theme_data', jsonValue);
+    RNRestart.Restart();
+    console.log('Theme Changed')
+  }
 
  
   rightHeader = () => {
     return (
-        <View style={{alignItems:'center',justifyContent:'center',right:'10%'}}>
-                <Button icon="pencil-plus-outline" mode="contained" onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{flag:0,navigation:this.props.route.navigation})} >
-                  Add Note ({this.state.notes_len})
-                </Button>
+        <View style={{alignItems:'center',justifyContent:'center',right:'30%'}}>
+                                        <IconButton
+                                          icon={this.props.route.theme.mode!="light"?'lightbulb-off':'lightbulb'}
+                                          color={this.props.route.theme.mode=="light"?this.props.route.theme.primary:this.props.route.theme.text}
+                                          size={30}
+                                          onPress={() => this.setTheme()}
+                                        />
           </View>
     );
   };
@@ -105,46 +118,56 @@ export default class NotesComponent extends React.Component {
                                       <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
 
 
-
+                                 
+                                    <View style={{position:'absolute',bottom:20,right:'7%'}}>
+                                        <IconButton
+                                          icon="plus"
+                                          color={theme.background}
+                                          size={40}
+                                          onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{flag:0,navigation:this.props.route.navigation,theme:this.props.route.theme})}
+                                          style={{backgroundColor:theme.primary}}
+                                        />
+                                    </View>
 
                                 </View>
 
-      :<View style={styles.body}>
+      :<View style={{flex: 1, backgroundColor:theme.background, justifyContent:'center'}}>
         <ScrollView >
         <FlatList
         data={this.state.notes}
         nestedScrollEnabled={true}
-        style={{marginTop:20}}
+        style={{marginTop:30}}
                 renderItem={({ item }) => (
                   
                   <TouchableOpacity
                     style={{ flex: 1, flexDirection: 'column', margin: 1 ,marginBottom:30}}
-                    onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation})}
+                    onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation,theme:this.props.route.theme,uri:'data:image/png;base64,'+item.imageBase64})}
                     activeOpacity={0.2}
                   >
-                    <View style={{borderColor:theme.accent,borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
-                        <View style={{backgroundColor:theme.accent,borderTopLeftRadius:10,borderTopRightRadius:10}}>
+                    <View style={{borderColor:theme.text,borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
+                        <View style={{backgroundColor:theme.mode=="light"?theme.primary:theme.text,borderTopLeftRadius:10,borderTopRightRadius:10}}>
                             <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:theme.background}}>{item.title}</Title>
                         </View>
-                        
+                        {item.content!=""?
                         <View style={{marginHorizontal:'10%',marginVertical:30}}>
                           
                           <Paragraph style={{textAlign:'center'}}>{item.content}</Paragraph>
                         </View>
+                        :null}
                         {item.imageUri!=''?
-                          <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:30,marginBottom:50}}>
+                          <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:50,marginBottom:50}}>
                           <ImageModal
                           resizeMode="contain"
                           imageBackgroundColor={theme.background}
                           overlayBackgroundColor={theme.background}
                           style={{
                             width: Dimensions.get('window').width/1.25,
-                            height: 150,
+                            height: 100,
                             alignSelf:'center',
                             alignContent:'center'
                           }}
                           source={{
-                            uri: item.imageUri,
+                            uri:'data:image/png;base64,'+item.imageBase64,
                           }}
                           
                         />
@@ -159,9 +182,16 @@ export default class NotesComponent extends React.Component {
       />
       </ScrollView>
 
-      
-
-
+     
+                                    <View style={{position:'absolute',bottom:20,right:'7%'}}>
+                                        <IconButton
+                                          icon="plus"
+                                          color={theme.background}
+                                          size={40}
+                                          onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{flag:0,navigation:this.props.route.navigation})}
+                                          style={{backgroundColor:theme.primary}}
+                                        />
+                                    </View>
       </View>
     );
   }

@@ -10,7 +10,8 @@ export default class AddNoteComponent extends React.Component {
 
   state={
     imageUri:'',
-    imageBase64:''
+    imageBase64:'',
+    submitLoading:false
   }
 
   requestCameraPermission = async () => {
@@ -86,7 +87,6 @@ export default class AddNoteComponent extends React.Component {
   };
 
   setImages(uri,base64){
-    console.log('Base64 =',base64);
     this.setState({imageUri:uri,imageBase64:base64});
    
   }
@@ -97,6 +97,7 @@ export default class AddNoteComponent extends React.Component {
     this.requestCameraPermission();
     const options = {
       title: 'Select Image',
+      quality:0.2,
       noData:false,
       storageOptions: {
         skipBackup: true,
@@ -133,6 +134,7 @@ export default class AddNoteComponent extends React.Component {
   }
 
   createNote = async (value) => {
+    this.setState({submitLoading:true});
     try {
       let data=await this.getData();
       if(!data){
@@ -145,11 +147,13 @@ export default class AddNoteComponent extends React.Component {
       data.push({id,title,content,imageUri,imageBase64});
       const jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem('@note_data', jsonValue);
+      this.setState({submitLoading:false});
       let nav=this.props.route.params.navigation;
       nav.navigate('HomeContainer',{refresh:true})
       
     } catch (e) {
-      console.log(e);
+      console.log('Error in Saving Asynstorage',e);
+      this.setState({submitLoading:false})
     }
   }
 
@@ -190,7 +194,7 @@ export default class AddNoteComponent extends React.Component {
         }}
         onSubmit={async (values, { resetForm }) => {
           try {
-            if (values.note_content != ''&&values.note_title!='') {
+            if (values.note_title!='') {
               await this.createNote(values);
               resetForm();
             }
@@ -210,12 +214,13 @@ export default class AddNoteComponent extends React.Component {
             }}
           >
             <TextInput
-              label="Enter Note Headline"
+              label="Enter Note Headline *"
               mode="outlined"
               value={values.note_title}
               onChangeText={handleChange('note_title')}
               onBlur={handleBlur('note_title')}
               style={{ fontSize: 15, width: '90%' ,marginTop:10}}
+              
             />
             <TextInput
               label="Enter your Note here"
@@ -241,8 +246,8 @@ export default class AddNoteComponent extends React.Component {
             <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center'}}>
                 <ImageModal
                 resizeMode="contain"
-                imageBackgroundColor="#212121"
-                overlayBackgroundColor="#212121"
+                imageBackgroundColor={this.props.route.params.theme.background}
+                overlayBackgroundColor={this.props.route.params.theme.background}
                 style={{
                   width: Dimensions.get('window').width/1.25,
                   height: 200,
@@ -250,7 +255,7 @@ export default class AddNoteComponent extends React.Component {
                   alignContent:'center'
                 }}
                 source={{
-                  uri: this.state.imageUri,
+                  uri: this.props.route.params.flag==1?this.props.route.params.uri:'data:image/png;base64,'+this.state.imageBase64,
                 }}
                 
               />
@@ -269,7 +274,7 @@ export default class AddNoteComponent extends React.Component {
             </View>
             <View style={{marginTop:0, flexDirection:'row' }}>
 
-              <Button icon="send" mode="contained" style={{marginHorizontal:'2%'}} onPress={data => handleSubmit(data)}>
+              <Button icon="send" mode="contained" style={{marginHorizontal:'2%'}} onPress={data => handleSubmit(data)} loading={this.state.submitLoading}>
                 Submit
               </Button>
               {this.props.route.params.flag==1?

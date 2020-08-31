@@ -9,7 +9,7 @@ class SplashScreenContainer extends Component {
   }
 
    componentDidMount() {
-    StatusBar.setBackgroundColor('#0099FF', true);
+    StatusBar.setBackgroundColor('#f7b621', true);
     
   }
 
@@ -17,7 +17,7 @@ class SplashScreenContainer extends Component {
 
   render() {
     return (
-      <View style={{flex:1,backgroundColor:'#0099FF',alignItems:'center',justifyContent:'center'}}>
+      <View style={{flex:1,backgroundColor:'#f7b621',alignItems:'center',justifyContent:'center'}}>
         
         <Text style={{color:'white',fontSize:40,marginBottom:20}}>QNotes</Text>
         <ActivityIndicator size="large" color="white" />

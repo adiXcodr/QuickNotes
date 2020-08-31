@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { StatusBar } from 'react-native';
+import { StatusBar,LogBox } from 'react-native';
 import Start from './Navigation';
 import SplashScreenContainer from '../components/SplashScreen/index';
 import SplashScreen from 'react-native-splash-screen'
@@ -10,8 +10,15 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { DefaultTheme } from 'react-native-paper';
 import {fonts} from './Constants';
 
+LogBox.ignoreAllLogs(
+  [
+    'VirtualizedLists should never be nested', 
+  ]
+);
+
 export default class App extends React.Component {
 
+  
   state={
       loading:true,
       theme:{},
@@ -31,7 +38,7 @@ export default class App extends React.Component {
   async setColors(){
     let theme=await this.getData();
     if(!theme){
-      let mode='light', primary='#0099FF', background='white', text='black', accent='#fafafa';
+      let mode='dark', primary='#f7b621', background='#212121', text='white', accent='#212121';
       theme={mode,primary,background,text,accent};
     }
     const primaryTheme = {
@@ -43,7 +50,7 @@ export default class App extends React.Component {
         accent: theme.accent,
         surface: theme.accent,
         text:theme.text,
-        placeholder:theme.placeholder
+        placeholder:theme.text
       },
       fonts: {
         ...DefaultTheme.fonts,

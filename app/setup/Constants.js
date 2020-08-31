@@ -1,5 +1,5 @@
 export const colors = {
-    primaryColor: '#0099FF',
+    primaryColor: '#f7b621',
     secondaryColor: 'rgba(129, 207, 174, 0.5)',
     buttonColor: 'white',
     buttonColorActive: 'black',
