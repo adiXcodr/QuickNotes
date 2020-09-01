@@ -70,7 +70,6 @@ export default class NotesComponent extends React.Component {
     const jsonValue = JSON.stringify(theme);
     await AsyncStorage.setItem('@theme_data', jsonValue);
     RNRestart.Restart();
-    console.log('Theme Changed')
   }
 
  
