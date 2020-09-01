@@ -21,7 +21,7 @@ class SplashScreenContainer extends Component {
         
         <Text style={{color:'white',fontSize:40,marginBottom:20}}>QNotes</Text>
         <ActivityIndicator size="large" color="white" />
-        <Text style={{color:'white',fontSize:20,marginTop:20}}>A Fast Notemaking App</Text>
+        <Text style={{color:'white',fontSize:20,marginTop:20}}>A Fast Notemaking Solution</Text>
       </View>
     );
   }

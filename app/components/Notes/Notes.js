@@ -76,7 +76,7 @@ export default class NotesComponent extends React.Component {
  
   rightHeader = () => {
     return (
-        <View style={{alignItems:'center',justifyContent:'center',right:'30%'}}>
+        <View style={{alignItems:'center',justifyContent:'center',right:'20%'}}>
                                         <IconButton
                                           icon={this.props.route.theme.mode!="light"?'lightbulb-off':'lightbulb'}
                                           color={this.props.route.theme.mode=="light"?this.props.route.theme.primary:this.props.route.theme.text}
@@ -141,12 +141,12 @@ export default class NotesComponent extends React.Component {
                   
                   <TouchableOpacity
                     style={{ flex: 1, flexDirection: 'column', margin: 1 ,marginBottom:30}}
-                    onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation,theme:this.props.route.theme,uri:'data:image/png;base64,'+item.imageBase64})}
+                    onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation,theme:this.props.route.theme})}
                     activeOpacity={0.2}
                   >
-                    <View style={{borderColor:theme.text,borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
+                    <View style={{borderColor:'#aaa',borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
                         <View style={{backgroundColor:theme.mode=="light"?theme.primary:theme.text,borderTopLeftRadius:10,borderTopRightRadius:10}}>
-                            <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:theme.background}}>{item.title}</Title>
+                            <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:theme.background,fontSize:17}}>{item.title}</Title>
                         </View>
                         {item.content!=""?
                         <View style={{marginHorizontal:'10%',marginVertical:30}}>
@@ -154,7 +154,7 @@ export default class NotesComponent extends React.Component {
                           <Paragraph style={{textAlign:'center'}}>{item.content}</Paragraph>
                         </View>
                         :null}
-                        {item.imageUri!=''?
+                        {item.imageBase64!=''?
                           <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:50,marginBottom:50}}>
                           <ImageModal
                           resizeMode="contain"

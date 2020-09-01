@@ -176,8 +176,8 @@ export default class AddNoteComponent extends React.Component {
     this.requestReadPermission();
     this.requestWritePermission();
     try{
-      let uri=this.props.route.params.flag==1?this.props.route.params.note.imageUri:'';
-      this.setState({imageUri:uri});
+      let uri=this.props.route.params.flag==1?this.props.route.params.note.imageBase64:'';
+      this.setState({imageBase64:uri});
     }catch(e){
       console.log(e);
     }
@@ -234,7 +234,7 @@ export default class AddNoteComponent extends React.Component {
             />
             <View style={{marginVertical:30,width:'95%',alignSelf:'center',alignItems:'center'}}>
               
-            {this.state.imageUri==''?
+            {this.state.imageBase64==''?
              <Button icon="plus" mode="outlined" style={{marginHorizontal:'2%'}} onPress={()=>this.scanNote()}
                      contentStyle={{borderColor:'white'}}
              >
@@ -255,7 +255,7 @@ export default class AddNoteComponent extends React.Component {
                   alignContent:'center'
                 }}
                 source={{
-                  uri: this.props.route.params.flag==1?this.props.route.params.uri:'data:image/png;base64,'+this.state.imageBase64,
+                  uri: 'data:image/png;base64,'+this.state.imageBase64,
                 }}
                 
               />
@@ -264,7 +264,7 @@ export default class AddNoteComponent extends React.Component {
               icon="delete-circle"
               color={'red'}
               size={30}
-              onPress={()=>this.setState({imageUri:''})}
+              onPress={()=>this.setState({imageUri:'',imageBase64:''})}
               style={{position:'absolute',top:-10,right:0,backgroundColor:'white'}}
             />
           </View>

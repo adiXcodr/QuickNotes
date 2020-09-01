@@ -53,9 +53,12 @@ export default class Start extends React.Component {
                     <Stack.Screen options={{ title: 'QNotes',
                         headerStyle: {
                             backgroundColor: theme.accent,
+                            shadowColor: 'transparent',
+                            elevation:0
                           },
                           headerTitleStyle:{color:theme.primary},
-                          headerTintColor:theme.text
+                          headerTintColor:theme.text,
+                        
                          }} name="HomeContainer">
                         {props => <Home key={Date.now()} {...props} theme={theme}/>}
                     </Stack.Screen>
@@ -63,6 +66,8 @@ export default class Start extends React.Component {
                         options={{ title: 'Add Note',
                         headerStyle: {
                             backgroundColor: theme.accent,
+                            shadowColor: 'transparent',
+                            elevation:0
                           },
                           headerTitleStyle:{color:theme.text},
                           headerTintColor:theme.text
