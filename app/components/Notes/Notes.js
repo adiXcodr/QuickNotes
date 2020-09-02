@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {
-  Text,
   View,
   TouchableOpacity,
   ScrollView,
@@ -8,8 +7,7 @@ import {
   ActivityIndicator,
   Dimensions
 } from "react-native";
-import { IconButton, Button, Card, Title, Paragraph } from 'react-native-paper';
-import styles from './style.js';
+import { IconButton, Searchbar, Title, Paragraph } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImageModal from 'react-native-image-modal';
 import RNRestart from 'react-native-restart';
@@ -22,7 +20,9 @@ export default class NotesComponent extends React.Component {
       notes:[],
       notes_len:0,
       refresh:false,
-      loading:true
+      loading:true,
+      searchQuery:'',
+      mainData:[]
     };
 
 
@@ -52,9 +52,22 @@ export default class NotesComponent extends React.Component {
       
     }
     
-
-    this.setState({notes:DATA,notes_len:DATA.length});
+    this.setState({notes:DATA,notes_len:DATA.length,mainData:DATA});
   }
+
+  searchFunction(query){    
+    this.setState({searchQuery:query});
+    let data=this.state.mainData;
+    if(query!=''){
+        query=query.toLowerCase(); 
+        let b = data.filter(item => (item.title+item.content).toLowerCase().indexOf(query) > -1);
+        this.setState({notes:b});
+    }
+    else{
+      this.setState({notes:data});
+    }
+  
+}
 
 
   async setTheme(){
@@ -108,13 +121,23 @@ export default class NotesComponent extends React.Component {
 
   render() {
     let theme=this.props.route.theme;
+    const height = Math.round(Dimensions.get('window').height);
+    const width = Math.round(Dimensions.get('window').width);
     return (
       this.state.loading? <View style={{ flex: 1, backgroundColor:theme.background, justifyContent:'center',alignItems:'center'}}>
                                 <ActivityIndicator size="large" color={theme.text} />
                           </View>
       :
-      this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:theme.background, justifyContent:'center',alignItems:'center'}}>
-                                      <Paragraph style={{fontSize:20}}>It's lonely in here...</Paragraph>
+      this.state.notes_len==0?  <View style={{ flex: 1, backgroundColor:theme.background,alignItems:'center'}}>
+                                       <View style={{width:'100%',alignSelf:'center',alignItems:'center',justifyContent:'center'}}>
+                                            <Searchbar
+                                                placeholder="Search Notes"
+                                                onChangeText={(query)=>this.searchFunction(query)}
+                                                value={this.state.searchQuery}
+                                                inputStyle={{fontSize:17}}
+                                            />
+                                      </View>
+                                      <Paragraph style={{fontSize:20,marginTop:height/2.5}}>It's lonely in here...</Paragraph>
 
 
                                  
@@ -131,11 +154,21 @@ export default class NotesComponent extends React.Component {
                                 </View>
 
       :<View style={{flex: 1, backgroundColor:theme.background, justifyContent:'center'}}>
+       
+        <View style={{width:'100%',alignSelf:'center',alignItems:'center',justifyContent:'center'}}>
+          <Searchbar
+              placeholder="Search Notes"
+              onChangeText={(query)=>this.searchFunction(query)}
+              value={this.state.searchQuery}
+              inputStyle={{fontSize:17}}
+          />
+        </View>
+
         <ScrollView >
         <FlatList
         data={this.state.notes}
         nestedScrollEnabled={true}
-        style={{marginTop:30}}
+        style={{marginTop:40}}
                 renderItem={({ item }) => (
                   
                   <TouchableOpacity
@@ -150,7 +183,7 @@ export default class NotesComponent extends React.Component {
                         {item.content!=""?
                         <View style={{marginHorizontal:'10%',marginVertical:30}}>
                           
-                          <Paragraph style={{textAlign:'center'}}>{item.content}</Paragraph>
+                          <Paragraph style={{textAlign:item.imageBase64==""?"left":"center"}}>{item.content}</Paragraph>
                         </View>
                         :null}
                         {item.imageBase64!=''?

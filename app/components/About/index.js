@@ -62,7 +62,7 @@ export default class AboutComponent extends React.Component {
             </View>
                         <View style={{alignItems:'center',justifyContent:'center',marginHorizontal:'10%',marginTop:height/50}}>
                             <Button icon="web" mode="contained" style={{backgroundColor:this.props.route.theme.primary}} onPress={() => this.openURL('https://github.com/adiXcodr/QuickNotes')} labelStyle={{color:'white'}} >
-                            View on Github 
+                            Github 
                             </Button>
                     </View>   
 
@@ -71,7 +71,7 @@ export default class AboutComponent extends React.Component {
                             <View style={{marginTop:height/20,alignItems:'center',justifyContent:'center',alignSelf:'center'}}>
                               <QRCode
                                   value={this.state.downloadURL}
-                                  size={width/1.5}
+                                  size={width/2}
                               /> 
                               <View style={{alignItems:'center',justifyContent:'center',marginHorizontal:'2%',marginTop:height/30,flexDirection:'row'}}>
                              

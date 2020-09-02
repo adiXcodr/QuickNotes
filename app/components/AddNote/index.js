@@ -11,7 +11,9 @@ export default class AddNoteComponent extends React.Component {
   state={
     imageUri:'',
     imageBase64:'',
-    submitLoading:false
+    submitLoading:false,
+    params:{},
+    loading:true
   }
 
   requestCameraPermission = async () => {
@@ -148,7 +150,7 @@ export default class AddNoteComponent extends React.Component {
       const jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem('@note_data', jsonValue);
       this.setState({submitLoading:false});
-      let nav=this.props.route.params.navigation;
+      let nav=this.state.params.navigation;
       nav.navigate('HomeContainer',{refresh:true})
       
     } catch (e) {
@@ -158,14 +160,14 @@ export default class AddNoteComponent extends React.Component {
   }
 
   async deleteNote(){
-      id=this.props.route.params.note.id;
+      id=this.state.params.note.id;
       try {
         let data=await this.getData();
         let idToRemove = id;
         data = data.filter((item) => item.id !== idToRemove);
         const jsonValue = JSON.stringify(data);
         await AsyncStorage.setItem('@note_data', jsonValue);
-        let nav=this.props.route.params.navigation;
+        let nav=this.state.params.navigation;
         nav.navigate('HomeContainer',{refresh:true});
 
       } catch (e) {
@@ -177,7 +179,8 @@ export default class AddNoteComponent extends React.Component {
     this.requestWritePermission();
     try{
       let uri=this.props.route.params.flag==1?this.props.route.params.note.imageBase64:'';
-      this.setState({imageBase64:uri});
+      params=this.props.route.params;
+      this.setState({imageBase64:uri,params:params,loading:false});
     }catch(e){
       console.log(e);
     }
@@ -185,12 +188,14 @@ export default class AddNoteComponent extends React.Component {
 
   render() {
     return (
+
       <ScrollView style={{flex:1}}>
+      {!this.state.loading?
       <Formik
         initialValues={{
-          note_id:this.props.route.params.flag==1?this.props.route.params.note.id : Date.now(),
-          note_title: this.props.route.params.flag==1?this.props.route.params.note.title : '',
-          note_content: this.props.route.params.flag==1?this.props.route.params.note.content : ''
+          note_id:this.state.params.flag==1?this.state.params.note.id : Date.now(),
+          note_title: this.state.params.flag==1?this.state.params.note.title : '',
+          note_content: this.state.params.flag==1?this.state.params.note.content : ''
         }}
         onSubmit={async (values, { resetForm }) => {
           try {
@@ -246,8 +251,6 @@ export default class AddNoteComponent extends React.Component {
             <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center'}}>
                 <ImageModal
                 resizeMode="contain"
-                imageBackgroundColor={this.props.route.params.theme.background}
-                overlayBackgroundColor={this.props.route.params.theme.background}
                 style={{
                   width: Dimensions.get('window').width/1.25,
                   height: 200,
@@ -277,7 +280,7 @@ export default class AddNoteComponent extends React.Component {
               <Button icon="send" mode="contained" style={{marginHorizontal:'2%'}} onPress={data => handleSubmit(data)} loading={this.state.submitLoading}>
                 Submit
               </Button>
-              {this.props.route.params.flag==1?
+              {this.state.params.flag==1?
               <Button icon="delete-circle" mode="contained" style={{backgroundColor:'#D44638',marginHorizontal:'2%'}} onPress={()=>this.deleteNote()}>
               Delete
             </Button>:null}
@@ -289,6 +292,7 @@ export default class AddNoteComponent extends React.Component {
           </View>
         )}
       </Formik>
+      :null}
       </ScrollView>
     );
   }
