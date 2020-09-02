@@ -38,7 +38,7 @@ export default class App extends React.Component {
   async setColors(){
     let theme=await this.getData();
     if(!theme){
-      let mode='dark', primary='#f7b621', background='#212121', text='white', accent='#212121';
+      let mode='light', primary='#f7b621', background='white', text='black', accent='white';
       theme={mode,primary,background,text,accent};
     }
     const primaryTheme = {
