@@ -5,7 +5,8 @@ import {
   ScrollView,
   FlatList,
   ActivityIndicator,
-  Dimensions
+  Dimensions,
+  Share
 } from "react-native";
 import { IconButton, Searchbar, Title, Paragraph } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -69,6 +70,26 @@ export default class NotesComponent extends React.Component {
   
 }
 
+  onShare = async (string) => {
+  try {
+    const result = await Share.share({
+      message:
+        string
+    });
+
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // shared with activity type of result.activityType
+      } else {
+        // shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // dismissed
+    }
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
   async setTheme(){
     let theme={};
@@ -118,6 +139,7 @@ export default class NotesComponent extends React.Component {
    
   }
 
+ 
 
   render() {
     let theme=this.props.route.theme;
@@ -171,27 +193,24 @@ export default class NotesComponent extends React.Component {
         style={{marginTop:40}}
                 renderItem={({ item }) => (
                   
-                  <TouchableOpacity
+                  <View
                     style={{ flex: 1, flexDirection: 'column', margin: 1 ,marginBottom:30}}
-                    onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{note:item,flag:1,navigation:this.props.route.navigation,theme:this.props.route.theme})}
-                    activeOpacity={0.2}
                   >
                     <View style={{borderColor:'#aaa',borderWidth:0.5,marginHorizontal:'8%',borderRadius:10}}>
                         <View style={{backgroundColor:theme.mode=="light"?theme.primary:theme.text,borderTopLeftRadius:10,borderTopRightRadius:10}}>
                             <Title style={{alignContent:'center',alignItems:'center',alignSelf:'center',color:theme.background,fontSize:17}}>{item.title}</Title>
                         </View>
                         {item.content!=""?
-                        <View style={{marginHorizontal:'10%',marginVertical:30}}>
+                        <View style={{marginHorizontal:'10%',marginTop:20}}>
                           
                           <Paragraph style={{textAlign:item.imageBase64==""?"left":"center"}}>{item.content}</Paragraph>
                         </View>
                         :null}
                         {item.imageBase64!=''?
-                          <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:50,marginBottom:50}}>
+                          <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',marginTop:20}}>
                           <ImageModal
                           resizeMode="contain"
-                          imageBackgroundColor={theme.background}
-                          overlayBackgroundColor={theme.background}
+                          overlayBackgroundColor={'#212121'}
                           style={{
                             width: Dimensions.get('window').width/1.25,
                             height: 100,
@@ -206,9 +225,33 @@ export default class NotesComponent extends React.Component {
                  
                     </View>
                         :null}
+                     <View style={{alignItems:'center',justifyContent:'center',marginHorizontal:'2%',marginVertical:10,flexDirection:'row'}}>
+                             
+                             <IconButton
+                                 icon="pencil"
+                                 color={theme.text}
+                                 size={25}
+                                 onPress={() => this.props.route.navigation.navigate('AddNoteComponent',{
+                                   note:item,
+                                   flag:1,
+                                   navigation:this.props.route.navigation,
+                                   theme:this.props.route.theme
+                                  })}
+                             />
+                             
+                             <IconButton
+                                 icon="share-variant"
+                                 color={theme.text}
+                                 size={25}
+                                 onPress={() => this.onShare(item.title.toUpperCase()+'\n'+item.content)}
+                                 disabled={item.content==""?true:false}
+                             />
+
+                     </View>
+
 
                     </View>
-                  </TouchableOpacity>
+                  </View>
                 )}
                 keyExtractor={(item, index) => index.toString()}
       />

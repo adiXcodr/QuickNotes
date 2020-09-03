@@ -135,6 +135,16 @@ export default class AddNoteComponent extends React.Component {
     }
   }
 
+  getThemeData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('@theme_data')
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch(e) {
+      console.log(e);
+      return(null);
+    }
+  }
+
   createNote = async (value) => {
     this.setState({submitLoading:true});
     try {
@@ -174,6 +184,19 @@ export default class AddNoteComponent extends React.Component {
         console.log(e);
       }
   }
+
+   async getCorrectBackground(){
+    try{
+      let background=this.props.route.params.theme.background;
+      return(background);
+    }catch(e){
+      console.log(e);
+      let theme=await this.getThemeData();
+      return(theme.background);
+    }
+  }
+
+
   componentDidMount(){
     this.requestReadPermission();
     this.requestWritePermission();
@@ -231,7 +254,7 @@ export default class AddNoteComponent extends React.Component {
               label="Enter your Note here"
               mode="outlined"
               multiline={true}
-              numberOfLines={10}
+              numberOfLines={8}
               value={values.note_content}
               onChangeText={handleChange('note_content')}
               onBlur={handleBlur('note_content')}
@@ -260,7 +283,7 @@ export default class AddNoteComponent extends React.Component {
                 source={{
                   uri: 'data:image/png;base64,'+this.state.imageBase64,
                 }}
-                
+                overlayBackgroundColor={'#212121'}
               />
                
             <IconButton

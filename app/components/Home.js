@@ -27,9 +27,11 @@ export default Home = (props) => {
       navigationState={{ index, routes }}
       onIndexChange={val => setIndex(val)}
       renderScene={renderScene}
-      shifting={true}
+      shifting={props.theme.mode!="light"?true:false}
       activeColor={props.theme.text}
-      inactiveColor={props.theme.text}
+      inactiveColor={"#bbb"}
+      barStyle={{backgroundColor:props.theme.background}}
+      
     />
   );
 };

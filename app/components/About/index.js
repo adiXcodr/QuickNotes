@@ -7,7 +7,7 @@ import Clipboard from '@react-native-community/clipboard';
 export default class AboutComponent extends React.Component {
 
   state={
-    downloadURL:'https://github.com/adiXcodr/QuickNotes/releases/download/0.1/app-universal-release.apk'
+    downloadURL:'https://github.com/adiXcodr/QuickNotes/releases/download/0.5/app-universal-release.apk'
   }
 
   async openURL(url){
