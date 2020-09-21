@@ -61,7 +61,7 @@ export default class NotesComponent extends React.Component {
     let data=this.state.mainData;
     if(query!=''){
         query=query.toLowerCase(); 
-        let b = data.filter(item => (item.title+item.content).toLowerCase().indexOf(query) > -1);
+        let b = data.filter(item => (item.title+item.content+item.imageOCR).toLowerCase().indexOf(query) > -1);
         this.setState({notes:b});
     }
     else{

@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { View,PermissionsAndroid,Image,FlatList,Dimensions,ScrollView} from 'react-native';
-import { Button, TextInput,IconButton} from 'react-native-paper';
+import { Button, TextInput,IconButton,Switch,Paragraph} from 'react-native-paper';
 import { Formik } from 'formik';
 import AsyncStorage from '@react-native-community/async-storage';
 import ImagePicker from 'react-native-image-picker';
 import ImageModal from 'react-native-image-modal';
+const axios = require('axios');
+import qs from 'qs';
 
 export default class AddNoteComponent extends React.Component {
 
@@ -13,7 +15,8 @@ export default class AddNoteComponent extends React.Component {
     imageBase64:'',
     submitLoading:false,
     params:{},
-    loading:true
+    loading:true,
+    isSwitchOn:false
   }
 
   requestCameraPermission = async () => {
@@ -156,7 +159,16 @@ export default class AddNoteComponent extends React.Component {
       let idToRemove = id;
       let imageUri=this.state.imageUri, imageBase64=this.state.imageBase64;
       data = data.filter((item) => item.id !== idToRemove);
-      data.push({id,title,content,imageUri,imageBase64});
+      let imageOCR= await this.doOCR(imageBase64);
+      if(imageOCR!=""){
+        imageUri='';
+        imageBase64='';
+        if(content!="")
+          content=content+'\n'+imageOCR;
+        else  
+          content=imageOCR;
+      }
+      data.push({id,title,content,imageUri,imageBase64,imageOCR});
       const jsonValue = JSON.stringify(data);
       await AsyncStorage.setItem('@note_data', jsonValue);
       this.setState({submitLoading:false});
@@ -196,13 +208,60 @@ export default class AddNoteComponent extends React.Component {
     }
   }
 
+   ocr_space_api = async (data) => {
+    let x;
+    await axios.post(`https://api.ocr.space/parse/image`,qs.stringify(data), {
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            }
+    })
+    .then(response => { 
+      x=response.data;
+    })
+    .catch(error => {
+      x=error.response.request._response;
+    });
+  
+    return(x);
+  };
+
+  async doOCR(base64){
+    if(base64==''||!base64||this.state.isSwitchOn==false){
+      return('');
+    }
+    base64='data:image/png;base64,'+base64;
+    let obj={
+      apikey:'3ff2333e3388957',
+      language: 'eng',
+      base64Image:base64
+    }
+    let x = await this.ocr_space_api(obj);
+    if(typeof(x)!="string"&&x){
+      console.log("API Response :",x);
+      if(x.OCRExitCode==1&&x.ParsedResults.length>0){
+        let ocr_string=x.ParsedResults[0].ParsedText;
+        ocr_string=ocr_string.replace(/\n/g, " ");
+        ocr_string=ocr_string.replace(/\r/g, "");
+        console.log(ocr_string)
+        return(ocr_string);
+      }
+      else{
+        return('');
+      }
+    }
+    else{
+      return('');
+    }
+
+    return('');
+  }
 
   componentDidMount(){
     this.requestReadPermission();
     this.requestWritePermission();
     try{
       let uri=this.props.route.params.flag==1?this.props.route.params.note.imageBase64:'';
-      params=this.props.route.params;
+      let params=this.props.route.params;
       this.setState({imageBase64:uri,params:params,loading:false});
     }catch(e){
       console.log(e);
@@ -285,6 +344,11 @@ export default class AddNoteComponent extends React.Component {
                 }}
                 overlayBackgroundColor={'#212121'}
               />
+
+              <View style={{alignItems:'center',width:'95%',justifyContent:'center',alignSelf:'center',flexDirection:'row',marginTop:20}}>
+                  <Paragraph style={{marginHorizontal:'2%'}}>Image To Text</Paragraph>
+                  <Switch style={{marginHorizontal:'2%'}} color={'green'} value={this.state.isSwitchOn} onValueChange={()=>this.setState({isSwitchOn:!this.state.isSwitchOn})} />
+              </View>
                
             <IconButton
               icon="delete-circle"

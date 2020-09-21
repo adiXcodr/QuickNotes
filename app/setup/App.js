@@ -38,7 +38,7 @@ export default class App extends React.Component {
   async setColors(){
     let theme=await this.getData();
     if(!theme){
-      let mode='light', primary='#f7b621', background='white', text='black', accent='white';
+      let mode='dark', primary='#f7b621', background='#212121', text='white', accent='#212121';
       theme={mode,primary,background,text,accent};
     }
     const primaryTheme = {
@@ -63,7 +63,7 @@ export default class App extends React.Component {
 
   async componentDidMount(){
     SplashScreen.hide();
-    setTimeout(() => this.setState({loading:false}) , 1000);
+    setTimeout(() => this.setState({loading:false}) , 100);
     this.setColors();
   }
 
